@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from services.pdf_parser import extract_text_from_pdf
+from services.document_parser import parse_document
 from services.clause_splitter import split_into_clauses
 from services.analyzer import analyze_clause
 
@@ -17,7 +17,7 @@ app.add_middleware(
 @app.post("/analyze/")
 async def analyze(file: UploadFile = File(...)):
 
-    text = extract_text_from_pdf(file.file)
+    text = parse_document(file.file, file.filename)
     clauses = split_into_clauses(text)
 
     results = []
